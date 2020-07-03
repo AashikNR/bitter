@@ -1,11 +1,16 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Login</router-link> |
-      <router-link to="/signup">Signup</router-link> |
-      <router-link to="/addnewblog">Add new tweet</router-link> |
-      <router-link to="/home">Home</router-link> |
-      <router-link to="/profile">Profile</router-link>
+      <div v-if="this.$store.state.user.token">
+        <router-link to="/addnewblog">Add new tweet</router-link> |
+        <router-link to="/home">Home</router-link> |
+        <router-link to="/profile">Profile</router-link> |
+        <router-link to="/user">Find Other's</router-link>
+      </div>
+      <div v-else>
+        <router-link to="/">Login</router-link> |
+        <router-link to="/signup">Signup</router-link>
+      </div>
     </div>
     <router-view/>
   </div>

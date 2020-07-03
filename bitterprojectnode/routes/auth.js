@@ -23,7 +23,7 @@ router.post('/login', async (req, res) => {
         const userid = { userid : results[0].userid}
         const accessToken = jwt.sign(userid , process.env.ACCESS_TOKEN_SECRET)
         console.log("done")
-        return res.status(200).json({err: false, msg: '', data: results, accesstoken : accessToken, userid :  results[0].userid});
+        return res.status(200).json({err: false, msg: '', data: results.userid, accesstoken : accessToken, userid :  results[0].userid});
       } else {
         console.log("no match pass")
         return res.status(500).json({err: false, msg: 'Password dont match'});

@@ -11,7 +11,7 @@
   >
     <b-card-text>
       <h4> Tweets </h4>
-      <li class="my-4" v-for="item in Data.data" :key="item.tweetid">
+      <li class="my-4" v-for="item in Data.data1" :key="item.tweetid">
           {{item.content}}
       </li>
     </b-card-text>

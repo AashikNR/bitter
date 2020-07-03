@@ -143,10 +143,38 @@ router.post('/liked',authenticateToken , async function(req, res){
 router.post('/profile',authenticateToken , async function(req, res){
   let userid = req.body.userid;
   console.log(req.body)
-  let sql = "SELECT `userid`, `username` , `content` FROM `login` as l NATURAL JOIN `tweets` as t WHERE l.userid ='"+userid+"' AND t.userid = '"+userid+"'"
+  let sql = "SELECT `userid`, `username`  FROM `login` WHERE userid ='"+userid+"'"
+  let sql1 = "SELECT `tweetid`, `content`  FROM `tweets` WHERE userid ='"+userid+"'"
   try {
     const results = await query(sql);
-    return res.status(200).json({err: false, msg: '', data: results});
+    const results1 = await query(sql1);
+    console.log(results1)
+    return res.status(200).json({err: false, msg: '', data: results ,data1:  results1});
+  }catch (e) {
+     console.log(e)
+     return res.status(500).json({err: true, msg: 'Internal error happend'});
+  }
+});
+
+router.get('/user',authenticateToken , async function(req, res){
+  let sql = "SELECT `userid`, `username`  FROM `login` WHERE 1"
+ try {
+    const results = await query(sql);
+    console.log(results)
+    return res.status(200).json({err: false, msg: '', data: results });
+  }catch (e) {
+     console.log(e)
+     return res.status(500).json({err: true, msg: 'Internal error happend'});
+  }
+});
+
+router.post('/usersearch',authenticateToken , async function(req, res){
+  let username = req.body.username;
+  console.log(username)
+  let sql = "SELECT `userid`, `username`  FROM `login` WHERE username = '" + username + "'"
+ try {
+    const results = await query(sql);
+    return res.status(200).json({err: false, msg: '', data: results });
   }catch (e) {
      console.log(e)
      return res.status(500).json({err: true, msg: 'Internal error happend'});

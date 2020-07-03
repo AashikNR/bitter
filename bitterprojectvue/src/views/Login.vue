@@ -29,8 +29,8 @@
 
       <b-button type="submit" variant="primary">Submit</b-button>
       <b-button type="reset" variant="danger">Reset</b-button>
-      {{DataList.userid}}
-      {{DataList.accesstoken}}
+      <!-- {{DataList.userid}} -->
+      <!-- {{DataList.accesstoken}} -->
     </b-form>
     </b-container>
   </div>
@@ -48,11 +48,19 @@ export default {
       show: true
     }
   },
+  mounted () {
+    if (this.DataList && this.$store.state.user.token !== undefined) {
+      this.$router.push('/home')
+    }
+  },
   methods: {
     onSuccess () {
       if (this.DataList) {
         localStorage.setItem('token', this.DataList.accesstoken)
         localStorage.setItem('userid', this.DataList.userid)
+        if (this.DataList.accesstoken !== undefined) {
+          this.$router.go(0)
+        }
       }
     },
     onSubmit  (evt) {

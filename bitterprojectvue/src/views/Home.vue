@@ -112,8 +112,9 @@ export default {
     logout () {
       localStorage.removeItem('token')
       localStorage.removeItem('userid')
-      alert('Successfully logged out')
+      alert('You are about log-out')
       this.$router.push('/')
+      this.$router.go(0)
     },
     like (id) {
       const requestOptions = {
