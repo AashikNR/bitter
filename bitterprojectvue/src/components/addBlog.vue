@@ -1,5 +1,5 @@
 <template>
-    <div id="add-blog">
+    <div id="add-blog" class="transition">
         <h2>Add a New Tweet</h2>
         <form>
             <label>Tweet Content:</label>
@@ -77,6 +77,10 @@ input[type="text"], textarea{
 }
 h3{
     margin-top: 10px;
+}
+.transition {
+  animation: 1s ease-out 0s 1 slideInFromLeft;
+  padding: 30px;
 }
 
 </style>

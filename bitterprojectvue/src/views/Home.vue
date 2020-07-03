@@ -1,21 +1,26 @@
 <template>
-  <div>
-    <h4>Welcome back
-    <b-button @click="logout">Log-out</b-button></h4>
-    <b-container class="bv-example-row">
+  <div class="main">
+    <div class="bg">
           <ul class="list-group" id="infinite-list">
             <li class="list-group-item" v-for="(item,index) in items" :key="item.tweetid">
-              {{index}} - {{item.content}} - <b-button @click="like(item.tweetid)">Like</b-button>
-              <b-button @click="liked(item.tweetid)" v-b-modal.modal-1>Check who else liked</b-button>
-              <b-button @click="follow(item.userid)">Follow this user</b-button>
+              {{index+1}} - {{item.content}}
+              <br>
+              <b-button variant="info" @click="like(item.tweetid)">Like {{likecount}}</b-button> |
+              <b-button  variant="info" @click="liked(item.tweetid)" v-b-modal.modal-1>Check who else liked</b-button> |
+              <b-button variant="info" @click="follow(item.userid)">Follow this user</b-button>
             </li>
           </ul>
-    </b-container>
+    </div>
     <div>
-      <b-modal id="modal-1" title="Liked profiles">
-        <p class="my-4" v-for="item in likedpeople.data" :key="item.tweetid">
-          <b-button @click="profile(item.userid)" v-b-modal.modal-1>{{item.username}}</b-button></p>
-      </b-modal>
+      <b-modal id="modal-1" title="Those who liked">
+          <b-list-group>
+            <h4 style="color:white">Followers</h4>
+            <b-list-group-item class="d-flex align-items-center bg" v-for="item in likedpeople.data" :key="item.tweetid">
+              <b-avatar class="mr-3"></b-avatar>
+              <span class="mr-auto">{{item.username}}</span>
+            </b-list-group-item>
+          </b-list-group>
+       </b-modal>
     </div>
   </div>
 </template>
@@ -48,7 +53,9 @@ export default {
       loading: false,
       items: [],
       iterations: 0,
-      likedpeople: []
+      likedpeople: [],
+      likecount: 10,
+      likee: false
     }
   },
   mounted () {
@@ -62,8 +69,6 @@ export default {
   },
   methods: {
     follow (id) {
-      // alert(this.Userid)
-      // alert(id)
       if (this.Token) {
         const requestOptions = {
           method: 'POST',
@@ -109,13 +114,6 @@ export default {
         this.loading = false
       }, 200)
     },
-    logout () {
-      localStorage.removeItem('token')
-      localStorage.removeItem('userid')
-      alert('You are about log-out')
-      this.$router.push('/')
-      this.$router.go(0)
-    },
     like (id) {
       const requestOptions = {
         method: 'POST',
@@ -137,7 +135,7 @@ export default {
 
 .list-group {
   overflow: auto;
-  height: 75vh;
+  height: 88vh;
   border: 2px solid #dce4ec;
   border-radius: 5px;
 }
@@ -148,5 +146,28 @@ export default {
   border-top: none;
   border-bottom: 2px solid #dce4ec;
 }
+.bg {
+  background: radial-gradient(ellipse at center, #ffffff 0%, #e5e5e5 100%);
+}
 
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.transition {
+  animation: 1s ease-out 0s 1 slideInFromLeft;
+  padding: 30px;
+}
+.main {
+  animation: fadein 2s;
+}
+@keyframes fadein {
+  from { opacity: 0}
+  to   { opacity: 1}
+}
 </style>

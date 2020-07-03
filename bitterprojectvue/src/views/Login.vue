@@ -1,5 +1,5 @@
 <template>
-  <div> <br>
+  <div class="transition"> <br>
     <h4>Please Login Here</h4>
     <b-container class="login">
     <b-form @submit="onSubmit" @reset="onReset" v-if="show">
@@ -99,5 +99,9 @@ export default {
   height: 300px;
   margin: 50px auto 0;
   width: 320px;
+}
+.transition {
+  animation: 1s ease-out 0s 1 slideInFromLeft;
+  padding: 30px;
 }
 </style>

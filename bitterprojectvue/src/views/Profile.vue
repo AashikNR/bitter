@@ -1,35 +1,38 @@
 <template>
-  <div>
+  <div class="transitionsfade">
       <div class="float-parent">
             <b-list-group style="max-width: 500px;">
               <h4 style="color:white">Me</h4>
-              <b-list-group-item class="d-flex align-items-center">
+              <b-list-group-item class="d-flex align-items-center bg">
                 <b-avatar class="mr-9" src="https://placekitten.com/300/300"></b-avatar>
                 <span class="mr-auto" style="text-transform: uppercase;"> {{Data.data[0].username}} </span>
               </b-list-group-item>
-              <b-list-group-item class="d-flex align-items-center">
+              <b-list-group-item class="d-flex align-items-center bg">
                 <b-avatar class="mr-9" text="ag"></b-avatar>
                 <span class="mr-auto"> Age : 23</span>
               </b-list-group-item>
-              <b-list-group-item class="d-flex align-items-center">
+              <b-list-group-item class="d-flex align-items-center bg">
                 <b-avatar class="mr-9" icon="people-fill"></b-avatar>
                 <span class="mr-auto">Address : Cecilia Chapman 711-2880 Nulla </span>
               </b-list-group-item>
-              <b-list-group-item class="d-flex align-items-center">
+              <b-list-group-item class="d-flex align-items-center bg">
                 <b-avatar class="mr-9" icon="people-fill"></b-avatar>
                 <span class="mr-auto">DOB : 01/01/2000 </span>
               </b-list-group-item>
-              <b-list-group-item class="d-flex align-items-center">
+              <b-list-group-item class="d-flex align-items-center bg">
                 <b-avatar class="mr-9" icon="people-fill"></b-avatar>
                 <span class="mr-auto">Joined on : 01/01/2020  </span>
+              </b-list-group-item>
+              <b-list-group-item class="d-flex align-items-center bg">
+                <b-button @click="logout">Log-out</b-button>
               </b-list-group-item>
             </b-list-group>
       </div>
       <div class="float-child">
             <b-list-group style="max-width: 300px;">
             <h4 style="color:white">Following</h4>
-            <b-list-group-item class="d-flex align-items-center" v-for="item in Followersdata.data" :key="item.userid">
-              <b-avatar class="mr-9" src="https://placekitten.com/300/300"></b-avatar>
+            <b-list-group-item class="d-flex align-items-center bg" v-for="item in Followersdata.data" :key="item.userid">
+              <b-avatar class="mr-3"></b-avatar>
               <span class="mr-auto">{{item.username}}</span>
             </b-list-group-item>
           </b-list-group>
@@ -37,16 +40,16 @@
       <div class="float-child">
        <b-list-group style="max-width: 300px;">
             <h4 style="color:white">Followers</h4>
-            <b-list-group-item class="d-flex align-items-center" v-for="item in Followersdatas.data" :key="item.userid">
-              <b-avatar class="mr-9" src="https://placekitten.com/300/300"></b-avatar>
+            <b-list-group-item class="d-flex align-items-center bg" v-for="item in Followersdatas.data" :key="item.userid">
+              <b-avatar class="mr-3"></b-avatar>
               <span class="mr-auto">{{item.username}}</span>
             </b-list-group-item>
           </b-list-group>
       </div>
       <div class="float-tweet">
        <b-list-group style="max-width: 100%;">
-            <h4 style="color:white">Tweet so far</h4>
-            <b-list-group-item class="d-flex align-items-center" v-for="(item,index) in Data.data1" :key="item.tweetid">
+            <h4 style="color:white">Tweets so far</h4>
+            <b-list-group-item class="d-flex align-items-center bg" v-for="(item,index) in Data.data1" :key="item.tweetid">
               <b-avatar class="mr-9" src="https://placekitten.com/300/300"></b-avatar>
               <span class="mr-auto">{{index+1}} - {{item.content}}</span>
             </b-list-group-item>
@@ -91,42 +94,13 @@ export default {
     }
   },
   methods: {
-    // followppl (id) {
-    //   if (this.Token) {
-    //     const requestOptions = {
-    //       method: 'POST',
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //         Authorization: 'Bearer ' + this.Token
-    //       },
-    //       body: JSON.stringify({ userid: this.Userid })
-    //     }
-    //     fetch('http://127.0.0.1:3000/following', requestOptions)
-    //       .then(response => response.json())
-    //       .then(data => (this.Followersdata = data))
-    //   } else {
-    //     alert('Please login to continue')
-    //     this.$router.push('/')
-    //   }
-    // },
-    // follower (id) {
-    //   if (this.Token) {
-    //     const requestOptions = {
-    //       method: 'POST',
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //         Authorization: 'Bearer ' + this.Token
-    //       },
-    //       body: JSON.stringify({ userid: this.Userid })
-    //     }
-    //     fetch('http://127.0.0.1:3000/followers', requestOptions)
-    //       .then(response => response.json())
-    //       .then(data => (this.Followersdatas = data))
-    //   } else {
-    //     alert('Please login to continue')
-    //     this.$router.push('/')
-    //   }
-    // }
+    logout () {
+      localStorage.removeItem('token')
+      localStorage.removeItem('userid')
+      alert('You are about log-out')
+      this.$router.push('/')
+      this.$router.go(0)
+    }
   }
 }
 </script>
@@ -149,5 +123,21 @@ export default {
 }
 .my-4 {
   color: rgb(255, 255, 255);
+}
+.bg {
+  background: radial-gradient(ellipse at center, #ffffff 0%, #e5e5e5 100%)
+}
+.transitionsfade {
+    animation: fadeInAnimation ease 3s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+@keyframes fadeInAnimation {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+     }
 }
 </style>
