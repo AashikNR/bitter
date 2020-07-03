@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div> <br>
     <h4>Please Login Here</h4>
-    <b-container class="bv-example-row">
+    <b-container class="login">
     <b-form @submit="onSubmit" @reset="onReset" v-if="show">
       <b-form-group
         id="input-group-1"
@@ -12,7 +12,7 @@
         <b-form-input
           id="input-1"
           v-model="form.email"
-          type="email"
+          type="text"
           required
           placeholder="Enter email"
         ></b-form-input>
@@ -22,15 +22,14 @@
         <b-form-input
           id="input-2"
           v-model="form.pass"
+          type="password"
           required
           placeholder="Enter password"
         ></b-form-input>
       </b-form-group>
 
-      <b-button type="submit" variant="primary">Submit</b-button>
+      <b-button type="submit" variant="primary">Submit</b-button> |
       <b-button type="reset" variant="danger">Reset</b-button>
-      <!-- {{DataList.userid}} -->
-      <!-- {{DataList.accesstoken}} -->
     </b-form>
     </b-container>
   </div>
@@ -50,7 +49,7 @@ export default {
   },
   mounted () {
     if (this.DataList && this.$store.state.user.token !== undefined) {
-      this.$router.push('/home')
+      this.$router.push('/user')
     }
   },
   methods: {
@@ -92,3 +91,13 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.login {
+  border: 1px solid #6088b6;
+  border-radius: 6px;
+  height: 300px;
+  margin: 50px auto 0;
+  width: 320px;
+}
+</style>

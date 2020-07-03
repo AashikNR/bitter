@@ -1,31 +1,58 @@
 <template>
-<div>
-  <b-card
-    :title = "Data.data[0].username"
-    img-src="https://picsum.photos/600/300/?image=25"
-    img-alt="Image"
-    img-top
-    tag="article"
-    style="max-width: 100rem;"
-    class="mb-2"
-  >
-    <b-card-text>
-      <h4> Tweets </h4>
-      <li class="my-4" v-for="item in Data.data1" :key="item.tweetid">
-          {{item.content}}
-      </li>
-    </b-card-text>
-      <b-button @click="followppl(Data.data[0].userid)"  variant="primary" v-b-modal.modal-1>Following</b-button> |
-      <b-button @click="follower(Data.data[0].userid)"  variant="primary" v-b-modal.modal-1>Followers</b-button>
-  </b-card>
-      <div>
-      <b-modal id="modal-1" >
-        <li class="my-4" v-for="item in Followersdata.data" :key="item.userid">
-            <b-button @click="profile(item.userid)" v-b-modal.modal-1>{{item.username}}</b-button>
-        </li>
-     </b-modal>
+  <div>
+      <div class="float-parent">
+            <b-list-group style="max-width: 500px;">
+              <h4 style="color:white">Me</h4>
+              <b-list-group-item class="d-flex align-items-center">
+                <b-avatar class="mr-9" src="https://placekitten.com/300/300"></b-avatar>
+                <span class="mr-auto" style="text-transform: uppercase;"> {{Data.data[0].username}} </span>
+              </b-list-group-item>
+              <b-list-group-item class="d-flex align-items-center">
+                <b-avatar class="mr-9" text="ag"></b-avatar>
+                <span class="mr-auto"> Age : 23</span>
+              </b-list-group-item>
+              <b-list-group-item class="d-flex align-items-center">
+                <b-avatar class="mr-9" icon="people-fill"></b-avatar>
+                <span class="mr-auto">Address : Cecilia Chapman 711-2880 Nulla </span>
+              </b-list-group-item>
+              <b-list-group-item class="d-flex align-items-center">
+                <b-avatar class="mr-9" icon="people-fill"></b-avatar>
+                <span class="mr-auto">DOB : 01/01/2000 </span>
+              </b-list-group-item>
+              <b-list-group-item class="d-flex align-items-center">
+                <b-avatar class="mr-9" icon="people-fill"></b-avatar>
+                <span class="mr-auto">Joined on : 01/01/2020  </span>
+              </b-list-group-item>
+            </b-list-group>
+      </div>
+      <div class="float-child">
+            <b-list-group style="max-width: 300px;">
+            <h4 style="color:white">Following</h4>
+            <b-list-group-item class="d-flex align-items-center" v-for="item in Followersdata.data" :key="item.userid">
+              <b-avatar class="mr-9" src="https://placekitten.com/300/300"></b-avatar>
+              <span class="mr-auto">{{item.username}}</span>
+            </b-list-group-item>
+          </b-list-group>
+      </div>
+      <div class="float-child">
+       <b-list-group style="max-width: 300px;">
+            <h4 style="color:white">Followers</h4>
+            <b-list-group-item class="d-flex align-items-center" v-for="item in Followersdatas.data" :key="item.userid">
+              <b-avatar class="mr-9" src="https://placekitten.com/300/300"></b-avatar>
+              <span class="mr-auto">{{item.username}}</span>
+            </b-list-group-item>
+          </b-list-group>
+      </div>
+      <div class="float-tweet">
+       <b-list-group style="max-width: 100%;">
+            <h4 style="color:white">Tweet so far</h4>
+            <b-list-group-item class="d-flex align-items-center" v-for="(item,index) in Data.data1" :key="item.tweetid">
+              <b-avatar class="mr-9" src="https://placekitten.com/300/300"></b-avatar>
+              <span class="mr-auto">{{index+1}} - {{item.content}}</span>
+            </b-list-group-item>
+          </b-list-group>
+      </div>
     </div>
-</div>
 </template>
 
 <script>
@@ -35,7 +62,8 @@ export default {
       Data: [],
       Token: this.$store.state.user.token,
       Userid: this.$store.state.user.userid,
-      Followersdata: []
+      Followersdata: [],
+      Followersdatas: []
     }
   },
   created  () {
@@ -51,57 +79,75 @@ export default {
       fetch('http://127.0.0.1:3000/profile', requestOptions)
         .then(response => response.json())
         .then(data => (this.Data = data))
+      fetch('http://127.0.0.1:3000/following', requestOptions)
+        .then(response => response.json())
+        .then(data => (this.Followersdata = data))
+      fetch('http://127.0.0.1:3000/followers', requestOptions)
+        .then(response => response.json())
+        .then(data => (this.Followersdatas = data))
     } else {
       alert('Please login to continue')
       this.$router.push('/')
     }
   },
   methods: {
-    profile (id) {
-      alert(id)
-    },
-    followppl (id) {
-      if (this.Token) {
-        const requestOptions = {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + this.Token
-          },
-          body: JSON.stringify({ userid: this.Userid })
-        }
-        this.Followersdata = ''
-        fetch('http://127.0.0.1:3000/following', requestOptions)
-          .then(response => response.json())
-          .then(data => (this.Followersdata = data))
-      } else {
-        alert('Please login to continue')
-        this.$router.push('/')
-      }
-    },
-    follower (id) {
-      if (this.Token) {
-        const requestOptions = {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + this.Token
-          },
-          body: JSON.stringify({ userid: this.Userid })
-        }
-        this.Followersdata = ''
-        fetch('http://127.0.0.1:3000/followers', requestOptions)
-          .then(response => response.json())
-          .then(data => (this.Followersdata = data))
-      } else {
-        alert('Please login to continue')
-        this.$router.push('/')
-      }
-    }
+    // followppl (id) {
+    //   if (this.Token) {
+    //     const requestOptions = {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //         Authorization: 'Bearer ' + this.Token
+    //       },
+    //       body: JSON.stringify({ userid: this.Userid })
+    //     }
+    //     fetch('http://127.0.0.1:3000/following', requestOptions)
+    //       .then(response => response.json())
+    //       .then(data => (this.Followersdata = data))
+    //   } else {
+    //     alert('Please login to continue')
+    //     this.$router.push('/')
+    //   }
+    // },
+    // follower (id) {
+    //   if (this.Token) {
+    //     const requestOptions = {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //         Authorization: 'Bearer ' + this.Token
+    //       },
+    //       body: JSON.stringify({ userid: this.Userid })
+    //     }
+    //     fetch('http://127.0.0.1:3000/followers', requestOptions)
+    //       .then(response => response.json())
+    //       .then(data => (this.Followersdatas = data))
+    //   } else {
+    //     alert('Please login to continue')
+    //     this.$router.push('/')
+    //   }
+    // }
   }
 }
 </script>
 
 <style lang="scss">
-
+.float-child {
+    width: 30%;
+    float: left;
+    padding: 50px;
+}
+.float-parent {
+    width: 40%;
+    float: left;
+    padding: 50px;
+}
+.float-tweet {
+    width: 100%;
+    float: left;
+    padding: 50px;
+}
+.my-4 {
+  color: rgb(255, 255, 255);
+}
 </style>

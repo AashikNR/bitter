@@ -1,6 +1,6 @@
 <template>
     <div id="add-blog">
-        <h2>Add a New  Post</h2>
+        <h2>Add a New Tweet</h2>
         <form>
             <label>Tweet Content:</label>
             <textarea v-model.trim="blog.content" required></textarea> <br>
@@ -14,7 +14,6 @@
 </template>
 
 <script>
-// Imports
 
 export default {
   created  () {
@@ -36,17 +35,19 @@ export default {
   },
   methods: {
     submitForm () {
-      const requestOptions = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + this.Token
-        },
-        body: JSON.stringify({ userid: this.Userid, content: this.blog.content })
+      if (confirm('Are you sure you want to add this tweet?')) {
+        const requestOptions = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + this.Token
+          },
+          body: JSON.stringify({ userid: this.Userid, content: this.blog.content })
+        }
+        fetch('http://127.0.0.1:3000/tweetupload', requestOptions)
+          .then(response => response.json())
+          .then(data => (this.DataList = data))
       }
-      fetch('http://127.0.0.1:3000/tweetupload', requestOptions)
-        .then(response => response.json())
-        .then(data => (this.DataList = data))
     }
   }
 }
