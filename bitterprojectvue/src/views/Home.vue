@@ -5,7 +5,7 @@
             <li class="list-group-item" v-for="(item,index) in items" :key="item.tweetid">
               {{index+1}} - {{item.content}}
               <br>
-              <b-button variant="info" @click="like(item.tweetid)">Like {{likecount}}</b-button> |
+              <b-button variant="info" @click="like(item.tweetid)">Like</b-button> |
               <b-button  variant="info" @click="liked(item.tweetid)" v-b-modal.modal-1>Check who else liked</b-button> |
               <b-button variant="info" @click="follow(item.userid)">Follow this user</b-button>
             </li>
@@ -13,8 +13,8 @@
     </div>
     <div>
       <b-modal id="modal-1" title="Those who liked">
+        Total Likes : {{likecount}}
           <b-list-group>
-            <h4 style="color:white">Followers</h4>
             <b-list-group-item class="d-flex align-items-center bg" v-for="item in likedpeople.data" :key="item.tweetid">
               <b-avatar class="mr-3"></b-avatar>
               <span class="mr-auto">{{item.username}}</span>
@@ -27,6 +27,12 @@
 
 <script>
 export default {
+  watch: {
+    item_length: function () {
+      this.likecount = 8
+      return this.likecount
+    }
+  },
   created  () {
     if (this.Token) {
       const requestOptions = {
@@ -54,8 +60,8 @@ export default {
       items: [],
       iterations: 0,
       likedpeople: [],
-      likecount: 10,
-      likee: false
+      likecount: [],
+      status: ''
     }
   },
   mounted () {
@@ -86,9 +92,6 @@ export default {
         this.$router.push('/')
       }
     },
-    profile (id) {
-      alert(id)
-    },
     liked (id) {
       const requestOptions = {
         method: 'POST',
@@ -101,6 +104,7 @@ export default {
       fetch('http://127.0.0.1:3000/liked', requestOptions)
         .then(response => response.json())
         .then(data => (this.likedpeople = data))
+        .then(data => (this.likecount = data.data.length))
     },
     loadMore () {
       this.loading = true
@@ -126,6 +130,10 @@ export default {
       fetch('http://127.0.0.1:3000/newlike', requestOptions)
         .then(response => response.json())
         .then(data => (this.DataList = data))
+        .then(data => this.status = data.data.affectedRows)
+      if (this.status === 0){
+        alert('already liked')
+      }
     }
   }
 }

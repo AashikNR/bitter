@@ -83,6 +83,18 @@ router.post('/likes',authenticateToken,async function (req, res) {
     }
 })
 
+router.post('/likecounts',authenticateToken,async function (req, res) {
+  let tweetid = req.body.tweetid;
+  let sql = "SELECT COUNT(likeid) FROM tweetlikes WHERE tweetid ='"+tweetid+"';"
+  try {
+    const results = await query(sql);
+    return res.status(200).json({err: false, msg: '', data: results});
+  }catch (e) {
+     console.log(e)
+     return res.status(500).json({err: true, msg: 'Internal error happend'});
+  }
+})
+
 router.post('/tweetupload', authenticateToken,async function(req, res){
   console.log(req.body)
     let userid = req.body.userid;
@@ -117,7 +129,8 @@ router.post('/newlike',authenticateToken , async function(req, res){
     let userid = req.body.userid;
     let tweetid = req.body.tweetid;
     console.log(req.body)
-    let sql = "INSERT INTO `tweetlikes`(`tweetid` ,`likeid`) VALUES ('"+ tweetid +"','"+ userid +"')";
+    // let sql = "INSERT IGNORE INTO `tweetlikes`(`tweetid` ,`likeid`) VALUES ('"+ tweetid +"','"+ userid +"')";
+    let sql = "INSERT INTO tweetlikes (tweetid,likeid) SELECT * FROM (SELECT '"+tweetid+"', '"+userid+"') AS tmp WHERE NOT EXISTS (SELECT tweetid , likeid   FROM tweetlikes WHERE tweetid = '"+tweetid+"' AND likeid = '"+userid+"') LIMIT 1;"
     try {
       const results = await query(sql);
       return res.status(200).json({err: false, msg: '', data: results});

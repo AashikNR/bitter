@@ -53,16 +53,7 @@ export default {
     }
   },
   methods: {
-    onSuccess () {
-      if (this.DataList) {
-        localStorage.setItem('token', this.DataList.accesstoken)
-        localStorage.setItem('userid', this.DataList.userid)
-        if (this.DataList.accesstoken !== undefined) {
-          this.$router.go(0)
-        }
-      }
-    },
-    onSubmit  (evt) {
+     onSubmit : function(evt) {
       evt.preventDefault()
       const requestOptions = {
         method: 'POST',
@@ -77,12 +68,19 @@ export default {
       const _this = this
       _this.onSuccess()
     },
+    onSuccess () {
+      if (this.DataList) {
+        localStorage.setItem('token', this.DataList.accesstoken)
+        localStorage.setItem('userid', this.DataList.userid)
+        if (this.DataList.accesstoken !== undefined) {
+          this.$router.go(0)
+        }
+      }
+    },
     onReset (evt) {
       evt.preventDefault()
-      // Reset our form values
       this.form.email = ''
       this.form.pass = ''
-      // Trick to reset/clear native browser form validation state
       this.show = false
       this.$nextTick(() => {
         this.show = true

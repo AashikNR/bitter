@@ -42,6 +42,16 @@ router.post('/signup', async (req, res) => {
     const results = await query("INSERT INTO `login`(`username` ,`password`) VALUES ('"+ name +"','"+ hasedPassword +"')");
     return res.status(200).json({err: false, msg: '', data: results});
   } catch (e) {
+    console.log(e)
+    return res.status(500).json({err: true, msg: 'Internal error happend'});
+  }
+})
+
+router.get('/username', async (req, res) => {
+  try {
+    const results = await query("SELECT `username` from login where 1");
+    return res.status(200).json({err: false, msg: '', data: results});
+  } catch (e) {
       console.log(e)
       return res.status(500).json({err: true, msg: 'Internal error happend'});
   }

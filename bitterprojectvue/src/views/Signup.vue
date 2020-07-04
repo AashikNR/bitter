@@ -100,7 +100,7 @@ export default {
     usernames () {
       fetch('http://127.0.0.1:3000/auth/username')
         .then(response => response.json())
-        .then(data => (this.Username = data.results))
+        .then(data => (this.Username = data.data))
     }
   }
 }
