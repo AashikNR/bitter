@@ -1,7 +1,7 @@
 <template>
   <div id="app">
   <b-navbar toggleable="lg" type="dark" variant="info">
-    <b-navbar-brand href="#">Bitter</b-navbar-brand>
+    <b-navbar-brand v-b-modal.modal-tall>Bitter</b-navbar-brand>
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav id ="nav">
         <b-nav-item v-if="this.$store.state.user.token">
@@ -16,8 +16,19 @@
         </b-nav-item>
       </b-navbar-nav>
     </b-collapse>
-  </b-navbar>
-    <router-view/>
+   </b-navbar>
+   <div>
+  <b-modal id="modal-tall" title="Who we are">
+    <p class="my-1" >
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu leo ut ex volutpat gravida.
+      Quisque est est, maximus non placerat sed, lacinia sit amet dui. Phasellus ultrices ultricies
+      metus et fermentum. Nunc non velit congue, feugiat neque eget, rutrum ex. Etiam mattis nec sem
+      pharetra vehicula. Donec elementum faucibus augue eu ornare. Cras tempor id odio a condimentum.
+      Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+    </p>
+  </b-modal>
+</div>
+  <router-view/>
   </div>
 </template>
 
