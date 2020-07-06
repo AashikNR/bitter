@@ -2,31 +2,20 @@
   <div class="main">
     <div class="bg">
           <ul class="list-group" id="infinite-list">
-            <li class="list-group-item" v-for="(item,index) in items" :key="item.tweetid">
-              {{index+1}} - {{item.content}}
-              <br>
-              <b-button variant="info" @click="like(item.tweetid)">Like</b-button> |
-              <b-button  variant="info" @click="liked(item.tweetid)" v-b-modal.modal-1>Check who else liked</b-button> |
-              <b-button variant="info" @click="follow(item.userid)">Follow this user</b-button>
+            <li class="list-group-item" v-for="(item) in items" :key="item.tweetid">
+              <tweets :tweets= item.tweetid></tweets>
             </li>
           </ul>
     </div>
-    <div>
-      <b-modal id="modal-1" title="Those who liked">
-        Total Likes : {{likecount}}
-          <b-list-group>
-            <b-list-group-item class="d-flex align-items-center bg" v-for="item in likedpeople.data" :key="item.tweetid">
-              <b-avatar class="mr-3"></b-avatar>
-              <span class="mr-auto">{{item.username}}</span>
-            </b-list-group-item>
-          </b-list-group>
-       </b-modal>
-    </div>
-  </div>
+ </div>
 </template>
 
 <script>
+import tweets from '@/components/tweets.vue'
 export default {
+  components: {
+    tweets
+  },
   watch: {
     item_length: function () {
       this.likecount = 8
@@ -74,38 +63,6 @@ export default {
     this.loadMore()
   },
   methods: {
-    follow (id) {
-      if (this.Token) {
-        const requestOptions = {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + this.Token
-          },
-          body: JSON.stringify({ userid: this.Userid, followid: id })
-        }
-        fetch('http://127.0.0.1:3000/newfollow', requestOptions)
-          .then(response => response.json())
-          .then(data => (this.Followersdata = data))
-      } else {
-        alert('Please login to continue')
-        this.$router.push('/')
-      }
-    },
-    liked (id) {
-      const requestOptions = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + this.Token
-        },
-        body: JSON.stringify({ tweetid: id })
-      }
-      fetch('http://127.0.0.1:3000/liked', requestOptions)
-        .then(response => response.json())
-        .then(data => (this.likedpeople = data))
-        .then(data => (this.likecount = data.data.length))
-    },
     loadMore () {
       this.loading = true
       setTimeout(e => {
@@ -117,23 +74,6 @@ export default {
         this.iterations = this.iterations + 10
         this.loading = false
       }, 200)
-    },
-    like (id) {
-      const requestOptions = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + this.Token
-        },
-        body: JSON.stringify({ userid: this.Userid, tweetid: id })
-      }
-      fetch('http://127.0.0.1:3000/newlike', requestOptions)
-        .then(response => response.json())
-        .then(data => (this.DataList = data))
-        .then(data => this.status = data.data.affectedRows)
-      if (this.status === 0){
-        alert('already liked')
-      }
     }
   }
 }

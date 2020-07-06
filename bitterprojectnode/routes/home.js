@@ -85,7 +85,7 @@ router.post('/likes',authenticateToken,async function (req, res) {
 
 router.post('/likecounts',authenticateToken,async function (req, res) {
   let tweetid = req.body.tweetid;
-  let sql = "SELECT COUNT(likeid) FROM tweetlikes WHERE tweetid ='"+tweetid+"';"
+  let sql = "SELECT COUNT(likeid) as count FROM tweetlikes WHERE tweetid ='"+tweetid+"';"
   try {
     const results = await query(sql);
     return res.status(200).json({err: false, msg: '', data: results});
@@ -113,8 +113,10 @@ router.post('/tweetupload', authenticateToken,async function(req, res){
 router.post('/newfollow',authenticateToken,async function(req, res){
     let userid = req.body.userid;
     let followid = req.body.followid;
-    let sql1 = "INSERT INTO `following`(`userid` ,`followingid`) VALUES ('"+ userid +"','"+ followid +"')";
-    let sql2 = "INSERT INTO `followers`(`userid` ,`followersid`) VALUES ('"+ followid +"','"+ userid +"')";
+    // let sql1 = "INSERT INTO `following`(`userid` ,`followingid`) VALUES ('"+ userid +"','"+ followid +"')";
+    let sql1 = "INSERT INTO following (userid,followingid) SELECT * FROM (SELECT '"+userid+"', '"+followid+"') AS tmp WHERE NOT EXISTS (SELECT userid , followingid  FROM following WHERE userid = '"+userid+"' AND followingid = '"+followid+"') LIMIT 1;"
+    // let sql2 = "INSERT INTO `followers`(`userid` ,`followersid`) VALUES ('"+ followid +"','"+ userid +"')";
+    let sql2 = "INSERT INTO followers (userid,followersid) SELECT * FROM (SELECT '"+followid+"', '"+userid+"') AS tmp WHERE NOT EXISTS (SELECT userid , followersid  FROM followers WHERE userid = '"+followid+"' AND followersid = '"+userid+"') LIMIT 1;"
     try {
       const results1 = await query(sql1);
       const results2 = await query(sql2);
@@ -186,6 +188,31 @@ router.post('/usersearch',authenticateToken , async function(req, res){
   console.log(username)
   let sql = "SELECT `userid`, `username`  FROM `login` WHERE username = '" + username + "'"
  try {
+    const results = await query(sql);
+    return res.status(200).json({err: false, msg: '', data: results });
+  }catch (e) {
+     console.log(e)
+     return res.status(500).json({err: true, msg: 'Internal error happend'});
+  }
+});
+
+router.post('/singletweet',authenticateToken , async function(req, res){
+  let tweetid = req.body.tweetid;
+  let sql = "SELECT `tweetid`, `content`, `userid` , `username` FROM `tweets` NATURAL  join login  WHERE tweetid = '" +tweetid+ "' and tweets.userid = login.userid"
+ try {
+    const results = await query(sql);
+    return res.status(200).json({err: false, msg: '', data: results });
+  }catch (e) {
+     console.log(e)
+     return res.status(500).json({err: true, msg: 'Internal error happend'});
+  }
+});
+
+router.post('/mysingletweet',authenticateToken , async function(req, res){
+  let tweetid = req.body.tweetid;
+  // let sql = "SELECT `tweetid`, `content`, `userid` FROM `tweets` NATURAL  join login  WHERE tweets.userid = '"+userid+"'"
+ let sql = "SELECT `tweetid`, `content`, `userid` FROM `tweets` WHERE tweetid = '"+tweetid+"'"
+  try {
     const results = await query(sql);
     return res.status(200).json({err: false, msg: '', data: results });
   }catch (e) {

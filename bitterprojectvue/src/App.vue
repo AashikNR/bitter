@@ -35,7 +35,6 @@
 <script>
 
 export default {
-  props: ['login'],
   data () {
     return {
 

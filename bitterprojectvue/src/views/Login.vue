@@ -53,7 +53,7 @@ export default {
     }
   },
   methods: {
-     onSubmit : function(evt) {
+    async onSubmit  (evt) {
       evt.preventDefault()
       const requestOptions = {
         method: 'POST',
@@ -62,7 +62,7 @@ export default {
         },
         body: JSON.stringify({ username: this.form.email, password: this.form.pass })
       }
-      fetch('http://127.0.0.1:3000/auth/login', requestOptions)
+      await fetch('http://127.0.0.1:3000/auth/login', requestOptions)
         .then(response => response.json())
         .then(data => (this.DataList = data))
       const _this = this

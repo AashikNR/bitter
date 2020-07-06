@@ -46,20 +46,21 @@
             </b-list-group-item>
           </b-list-group>
       </div>
-      <div class="float-tweet">
-       <b-list-group style="max-width: 100%;">
-            <h4 style="color:white">Tweets so far</h4>
-            <b-list-group-item class="d-flex align-items-center bg" v-for="(item,index) in Data.data1" :key="item.tweetid">
-              <b-avatar class="mr-9" src="https://placekitten.com/300/300"></b-avatar>
-              <span class="mr-auto">{{index+1}} - {{item.content}}</span>
+      <div>
+            <h4 style="color:white">My Tweets</h4>
+            <b-list-group-item v-for="(item) in Data.data1" :key="item.tweetid">
+              <singletweet :singletweet= item.tweetid></singletweet>
             </b-list-group-item>
-          </b-list-group>
       </div>
     </div>
 </template>
 
 <script>
+import singletweet from '@/components/mytweets.vue'
 export default {
+  components: {
+    singletweet
+  },
   data () {
     return {
       Data: [],
