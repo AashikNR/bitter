@@ -13,7 +13,6 @@
         <h4 style="text-align:left;">
         <b-avatar class="mr-9" src="https://placekitten.com/300/300"></b-avatar>
         <b-icon icon="at" variant="primary"></b-icon>
-        Me
         </h4>
         </template>
         <p>

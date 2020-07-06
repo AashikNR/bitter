@@ -7,7 +7,7 @@
         <b-nav-item v-if="this.$store.state.user.token">
           <router-link to="/addnewblog">Add tweet</router-link> |
           <router-link to="/home">Home</router-link> |
-          <router-link to="/profile">Profile</router-link> |
+          <router-link to="/profile">My Profile</router-link> |
           <router-link to="/user">Find Other's</router-link>
         </b-nav-item>
         <b-nav-item v-else>

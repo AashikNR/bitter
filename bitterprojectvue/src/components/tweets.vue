@@ -10,7 +10,7 @@
     <div>
     <b-jumbotron  text-variant="dark">
         <template v-slot:lead>
-        <h4 style="text-align:left;">
+        <h4 style="text-align:left;" @click="otheruser()">
         <b-avatar class="mr-9" src="https://placekitten.com/300/300"></b-avatar>
         <b-icon icon="at" variant="primary"></b-icon>
         {{Tweetdata[0].username}}
@@ -108,6 +108,15 @@ export default {
       if (this.likedstatus === false) {
         this.likedpeople = ''
       }
+    },
+    otheruser () {
+      // alert(this.Tweetdata[0].userid)
+      // this.$router.push('/other')
+      this.$router.push({
+        name: 'other',
+        params: { id: this.Tweetdata[0].userid }
+      })
+      // this.$router.push('/other')
     },
     async follow (id) {
       if (this.Userid === id) {
